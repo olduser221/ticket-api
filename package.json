@@ -1,0 +1,17 @@
+{
+  "name": "ticket-api",
+  "version": "1.0.0",
+  "main": "ticket.js",
+  "author": "recaptchaToken",
+  "license": "MIT",
+  "description": "Ticket API",
+  "private": true,
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "discord-webhook-node": "^1.0.7",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.5",
+    "tough-cookie": "^4.0.0",
+    "wabt": "^1.0.13"
+  }
+}
