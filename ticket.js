@@ -9,6 +9,8 @@ let isBrowser = false;
 let outputBuf = '';
 let cookieJar = new tough.CookieJar();
 
+
+// Fix this
 if (process.argv[2]) {
   cookieJar.setCookie(`ticket=${process.argv[2]};path=/`, 'https://supremenewyork.com');
 }

@@ -28,6 +28,13 @@ class Monitor {
         this.js_url
     }
 
+    get_links() {
+        return ({
+            javascript: this.js_url,
+            wasm: this.wasm_url
+        })
+    }
+
     async sleep (ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
@@ -133,62 +140,65 @@ http.listen(1337, 'localhost',function(){
     //console.log("Pooky server running.\n");
 })
 
-app.get('/atc', async (req, res) => {
+app.get('/gen', async (req, res) => {
     let respBody
-    exec(`node ticket.js`, (error, stdout, stderr) => {
-        if (error) {
-            respBody = {
-                status: "failed",
-                timestamp: Date.now()
-            }
-        }
-        if (stderr) {
-            respBody = {
-                status: "failed",
-                timestamp: Date.now()
-            }
-        }
-        else {
-            respBody = {
-                status: "success",
-                type: "atc",
-                _ticket: stdout.substring(stdout.indexOf('=') + 1, stdout.indexOf(';')),
-                ticket: "",
-                timestamp: Date.now()
-            }
-        }
 
-        res.json(respBody);
-        return stdout;
-    });
+    if (req.query.ticket) {
+        exec(`node ticket.js ${req.query.ticket}`, (error, stdout, stderr) => {
+            if (error) {
+                respBody = {
+                    status: "failed",
+                    timestamp: Date.now()
+                }
+            }
+            if (stderr) {
+                respBody = {
+                    status: "failed",
+                    timestamp: Date.now()
+                }
+            }
+            else {
+                respBody = {
+                    status: "success",
+                    type: "checkout",
+                    _ticket: stdout.substring(stdout.indexOf('=') + 1, stdout.indexOf(';')),
+                    ticket: req.query.ticket,
+                    timestamp: Date.now()
+                }
+            }
+            res.json(respBody);
+            return stdout;
+        });
+    } else {
+        exec(`node ticket.js`, (error, stdout, stderr) => {
+            if (error) {
+                respBody = {
+                    status: "failed",
+                    timestamp: Date.now()
+                }
+            }
+            if (stderr) {
+                respBody = {
+                    status: "failed",
+                    timestamp: Date.now()
+                }
+            }
+            else {
+                respBody = {
+                    status: "success",
+                    type: "checkout",
+                    _ticket: stdout.substring(stdout.indexOf('=') + 1, stdout.indexOf(';')),
+                    ticket: req.query.ticket,
+                    timestamp: Date.now()
+                }
+            }
+            res.json(respBody);
+            return stdout;
+        });
+    }
 });
 
-app.get('/checkout', async (req, res) => {
-    let respBody
-    exec(`node ticket.js ${req.query.ticket}`, (error, stdout, stderr) => {
-        if (error) {
-            respBody = {
-                status: "failed",
-                timestamp: Date.now()
-            }
-        }
-        if (stderr) {
-            respBody = {
-                status: "failed",
-                timestamp: Date.now()
-            }
-        }
-        else {
-            respBody = {
-                status: "success",
-                type: "checkout",
-                _ticket: stdout.substring(stdout.indexOf('=') + 1, stdout.indexOf(';')),
-                ticket: req.query.ticket,
-                timestamp: Date.now()
-            }
-        }
-        
-        res.json(respBody);
-        return stdout;
-    });
+app.get('/latest', async (req, res) => {
+    let respBody = main_monitor.get_links();
+    res.json(respBody);
 });
