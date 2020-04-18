@@ -11,11 +11,11 @@ npm install .
 node apiHandler.js
 ```
 
-## ATC
+## Generate
 
 ```bash
 Endpoint:
-- http://ticket.phaserobotics.io/atc
+- http://ticket.phaserobotics.io/gen?ticket={ticketFromResponseHeader}
 
 Response (JSON):
 {
@@ -26,17 +26,14 @@ Response (JSON):
   "timestamp": 1587102291014
 }
 ```
-## Checkout
+## Latest Files
 ```bash
 Endpoint:
-- http://ticket.phaserobotics.io/checkout?ticket={ticketFromResponseHeader}
+- http://ticket.phaserobotics.io/latest
 
 Response (JSON):
 {
-  "status": "success",
-  "type": "checkout",
-  "_ticket": "",
-  "ticket": "",
-  "timestamp": 1587102291014
+  "javascript": "https://d17ol771963kd3.cloudfront.net/assets/t.367b90.js",
+  "wasm": "https://d17ol771963kd3.cloudfront.net/assets/t.367b90.wasm"
 }
 ```
