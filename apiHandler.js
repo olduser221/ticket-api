@@ -186,7 +186,7 @@ app.get('/gen', async (req, res) => {
             else {
                 respBody = {
                     status: "success",
-                    type: "checkout",
+                    type: "atc",
                     _ticket: stdout.substring(stdout.indexOf('=') + 1, stdout.indexOf(';')),
                     ticket: req.query.ticket,
                     timestamp: Date.now()
